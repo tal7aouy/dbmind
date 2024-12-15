@@ -26,7 +26,7 @@ export default function SchemaVisualizer({ schema }: Props) {
       .force('link', d3.forceLink().id((d: any) => d.id))
       .force('charge', d3.forceManyBody().strength(-1000))
       .force('center', d3.forceCenter(width / 2, height / 2));
-   
+      
     // Transform schema data for visualization
     const nodes = schema.tables.map(table => ({
       id: table.name,

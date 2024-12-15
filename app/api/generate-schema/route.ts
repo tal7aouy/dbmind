@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-1.5-flash-latest",
-  apiKey: process.env.GOOGLE_API_KEY,
+  apiKey:process.env.GOOGLE_API_KEY,
   maxOutputTokens: 2048
 });
 
