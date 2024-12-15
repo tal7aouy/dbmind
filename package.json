@@ -11,8 +11,8 @@
   "dependencies": {
     "@langchain/core": "^0.3.23",
     "@langchain/google-genai": "^0.1.5",
+    "@next/env": "^15.1.0",
     "d3": "^7.9.0",
-    "dotenv": "^16.4.7",
     "mermaid": "^11.4.1",
     "next": "15.1.0",
     "react": "^19.0.0",
