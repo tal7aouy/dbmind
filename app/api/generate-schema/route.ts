@@ -43,7 +43,18 @@ const template =
 
 const promptTemplate = PromptTemplate.fromTemplate(template);
 
-// POST request handler to generate schema
+function validateInput(description: string): string | null {
+  if (!description || typeof description !== 'string') {
+    return 'Description is required and must be a string';
+  }
+  if (description.length < 10) {
+    return 'Description must be at least 10 characters long';
+  }
+  if (description.length > 1000) {
+    return 'Description must not exceed 1000 characters';
+  }
+  return null;
+}
 export async function POST(req: Request) {
   if (!process.env.GOOGLE_API_KEY) {
     console.error("GOOGLE_API_KEY is not set");
@@ -56,9 +67,10 @@ export async function POST(req: Request) {
   try {
     const { description } = await req.json();
 
-    if (!description) {
+    const validationError = validateInput(description);
+    if (validationError) {
       return NextResponse.json(
-        { error: "Description is required" },
+        { error: validationError },
         { status: 400 }
       );
     }
