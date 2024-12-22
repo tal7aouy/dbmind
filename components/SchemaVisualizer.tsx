@@ -13,7 +13,6 @@ export default function SchemaVisualizer({ schema }: Props) {
   useEffect(() => {
     if (!svgRef.current || !schema) return;
 
-    // Clear previous visualization
     d3.select(svgRef.current).selectAll('*').remove();
 
     // Set up the SVG
@@ -21,16 +20,17 @@ export default function SchemaVisualizer({ schema }: Props) {
     const width = 800;
     const height = 600;
 
-    // Create force simulation
     const simulation = d3.forceSimulation()
-      .force('link', d3.forceLink().id((d: any) => d.id))
-      .force('charge', d3.forceManyBody().strength(-1000))
+      .force('link', d3.forceLink().id((d: any) => d.id).distance(200))
+      .force('charge', d3.forceManyBody().strength(-300)) // Reduced strength
       .force('center', d3.forceCenter(width / 2, height / 2));
       
     // Transform schema data for visualization
     const nodes = schema.tables.map(table => ({
       id: table.name,
-      ...table
+      ...table,
+      fx: null,
+      fy: null
     }));
 
     const links = schema.relationships.map(rel => ({
@@ -53,7 +53,12 @@ export default function SchemaVisualizer({ schema }: Props) {
       .selectAll('g')
       .data(nodes)
       .enter()
-      .append('g');
+      .append('g')
+      .call(d3.drag<SVGGElement, any>()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended))
+      .style('cursor', 'move');
 
     // Add rectangles for tables
     node.append('rect')
@@ -83,6 +88,25 @@ export default function SchemaVisualizer({ schema }: Props) {
       });
     });
 
+    // Drag functions
+    function dragstarted(event: any) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event: any) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+
+    function dragended(event: any) {
+      if (!event.active) simulation.alphaTarget(0);
+      // Keep the node fixed at its dropped position
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+
     // Update positions on simulation tick
     simulation.nodes(nodes as any).on('tick', () => {
       link
@@ -95,7 +119,23 @@ export default function SchemaVisualizer({ schema }: Props) {
         .attr('transform', (d: any) => `translate(${d.x - 100},${d.y - 50})`);
     });
 
+    // After a short time, stop the simulation
+    setTimeout(() => {
+      simulation.alpha(0);
+      simulation.stop();
+    }, 2000);
+
     simulation.force<d3.ForceLink<any, any>>('link')?.links(links);
+
+    // Add zoom functionality
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 4])
+      .on('zoom', (event) => {
+        svg.selectAll('g').attr('transform', event.transform);
+      });
+
+    svg.call(zoom as any);
+
   }, [schema]);
 
   return (
