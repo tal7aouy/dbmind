@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DB Mind - Database Schema Generator
+
+DB Mind is an interactive web application that generates database schemas from natural language descriptions. It uses AI to convert text descriptions into detailed database designs, complete with tables, columns, and relationships.
+
+## Features
+
+- **Natural Language Input**: Simply describe your database requirements in plain English
+- **Real-time Visualization**: Instantly see your database schema rendered as an interactive diagram
+- **Interactive Schema Display**: Drag and zoom to explore complex database relationships
+- **Support for Complex Relationships**: Handles one-to-one, one-to-many, and many-to-many relationships
 
 ## Getting Started
 
-First, run the development server:
-
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone git@github.com:tal7aouy/dbmind.git
+```
+2. Install dependencies:
+```bash
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Create a .env file and add your Google API key:
+```
+GOOGLE_API_KEY=your_api_key_here
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Start the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+## How to Use
 
-To learn more about Next.js, take a look at the following resources:
+1. Enter a description of your database needs in the text area (e.g., "Create a blog system with users, posts, and comments")
+2. Click "Generate Schema" to create your database design
+3. The resulting schema will be displayed as an interactive diagram
+4. Drag tables to rearrange them and use mouse wheel to zoom in/out
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js](https://nextjs.org/) - React framework
+- [D3.js](https://d3js.org/) - Visualization library
+- [Google Gemini](https://deepmind.google/technologies/gemini/) - AI model for schema generation
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
 
-## Deploy on Vercel
+## Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To run linting:
+```bash
+npm run lint
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To build for production:
+```bash
+npm run build
+```
